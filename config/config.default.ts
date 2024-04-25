@@ -7,6 +7,12 @@ export default (appInfo: EggAppInfo) => {
 
   config.middleware = [];
 
+  config.security = {
+    csrf: {
+      enable: false,
+    },
+  };
+
   config.mongo = {
     client: {
       host: 'localhost',
