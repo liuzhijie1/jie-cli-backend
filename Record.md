@@ -1,3 +1,0 @@
-前端页面组件开发
-组件库打包 Travis.CI Drone
-后端开发  SMS短信服务  OSS 文件服务 Docker hub 服务  服务员Docker compose文件部署服务  github action

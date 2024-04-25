@@ -1,52 +1,52 @@
 {
-  "name": "jie-cli-backend",
-  "version": "1.0.0",
-  "description": "",
-  "private": true,
+  "name": "egg-ts-boilerplate",
+  "version": "1.1.0",
+  "description": "Boilerplate for Egg.js app using TypeScript.",
   "egg": {
-    "typescript": true
-  },
-  "scripts": {
-    "start": "egg-scripts start --daemon --title=egg-server-jie-cli-backend",
-    "stop": "egg-scripts stop --title=egg-server-jie-cli-backend",
-    "dev": "egg-bin dev",
-    "test:local": "egg-bin test -p",
-    "test": "npm run lint -- --fix && npm run test:local",
-    "cov": "egg-bin cov -p",
-    "ci": "npm run lint && npm run cov && npm run tsc && npm run clean",
-    "lint": "eslint . --ext .ts --cache",
-    "tsc": "tsc",
-    "clean": "tsc -b --clean"
+    "typescript": true,
+    "require": [
+      "egg-ts-helper/register"
+    ]
   },
   "dependencies": {
-    "@eggjs/tegg": "^3.5.2",
-    "@eggjs/tegg-aop-plugin": "^3.5.2",
-    "@eggjs/tegg-config": "^3.2.3",
-    "@eggjs/tegg-controller-plugin": "^3.5.2",
-    "@eggjs/tegg-eventbus-plugin": "^3.5.2",
-    "@eggjs/tegg-plugin": "^3.5.2",
-    "@eggjs/tegg-schedule-plugin": "^3.5.2",
-    "egg": "^3.15.0",
-    "egg-scripts": "^2.17.0",
-    "egg-tracer": "^2.0.0"
+    "egg": "^2.14.2",
+    "egg-mongo-native": "^3.3.0",
+    "egg-scripts": "^2.11.0"
   },
   "devDependencies": {
-    "@types/mocha": "10",
-    "@types/node": "20",
-    "@eggjs/tsconfig": "1",
-    "egg-bin": "6",
-    "egg-mock": "5",
-    "eslint": "8",
-    "eslint-config-egg": "13",
-    "typescript": "5"
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.18",
+    "@types/supertest": "^2.0.7",
+    "egg-bin": "^4.10.0",
+    "egg-mock": "^3.21.0",
+    "egg-ts-helper": "^1.20.0",
+    "tslib": "^1.9.3",
+    "tslint": "^5.12.1",
+    "typescript": "^3.2.2"
   },
   "engines": {
-    "node": ">=20.10.0"
+    "node": ">=8.9.0"
+  },
+  "scripts": {
+    "start": "egg-scripts start --daemon --title=egg-server-egg-ts-boilerplate",
+    "stop": "egg-scripts stop",
+    "dev": "egg-bin dev",
+    "debug": "egg-bin debug",
+    "test-local": "egg-bin test",
+    "test": "npm run lint -- --fix && npm run test-local",
+    "cov": "egg-bin cov",
+    "tsc": "ets && tsc -p tsconfig.json",
+    "ci": "npm run lint && npm run cov",
+    "lint": "tslint -c tslint.json --project .",
+    "clean": "ets clean"
+  },
+  "ci": {
+    "version": "8, 10"
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "git@github.com:brickyang/egg-ts-boilerplate.git"
   },
-  "author": "",
+  "author": "brick <brick.c.yang@gmail.com>",
   "license": "MIT"
 }
