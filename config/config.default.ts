@@ -23,7 +23,7 @@ export default (appInfo: EggAppInfo) => {
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,
     myLogger: {
-      allowMethods: ['POST'],
+      allowedMethods: ['POST'],
     },
     baseUrl: 'default.url',
   }
@@ -38,5 +38,5 @@ export default (appInfo: EggAppInfo) => {
     },
   }
 
-  return { ...(config as {}), ...bizConfig }
+  return { ...config as {}, ...bizConfig }
 }
