@@ -1,26 +1,27 @@
-import { Controller } from 'egg';
+import { Controller } from 'egg'
 
 export default class TestController extends Controller {
   public async index() {
-    const { ctx } = this;
-    const { id } = ctx.params;
-    const { query, body } = ctx.request;
+    const { ctx } = this
+    const { id } = ctx.params
+    const { query, body } = ctx.request
+    const { baseUrl } = ctx.app.config
 
     const resp = {
       query,
       body,
       id,
+      baseUrl,
     }
 
-
-    ctx.body = resp;
-    ctx.status = 200;
+    ctx.body = resp
+    ctx.status = 200
   }
 
   // getDog function to call the dog service get resp and return it
   public async getDog() {
-    const { ctx, service } = this;
-    const resp = await service.dog.show();
-    await ctx.render('test.tpl', { url: resp.message });
+    const { ctx, service } = this
+    const resp = await service.dog.show()
+    await ctx.render('test.tpl', { url: resp.message })
   }
 }

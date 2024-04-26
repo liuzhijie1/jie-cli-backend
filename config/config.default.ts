@@ -25,6 +25,7 @@ export default (appInfo: EggAppInfo) => {
     myLogger: {
       allowMethods: ['POST'],
     },
+    baseUrl: 'default.url',
   }
 
   config.mongo = {
