@@ -1,2 +1,5 @@
 request as Fri Apr 26 2024 15:14:14 GMT+0800 (China Standard Time) GET /dog 857ms
 request as Fri Apr 26 2024 15:14:22 GMT+0800 (China Standard Time) GET /dog 692ms
+request as Fri Apr 26 2024 15:32:13 GMT+0800 (China Standard Time) GET /dog 820ms
+request as Fri Apr 26 2024 15:34:37 GMT+0800 (China Standard Time) GET /dog 806ms
+request as Fri Apr 26 2024 15:35:04 GMT+0800 (China Standard Time) GET /dog 753ms
