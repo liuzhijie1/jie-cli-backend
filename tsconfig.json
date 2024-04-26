@@ -12,13 +12,15 @@
     "moduleResolution": "node",
     "noEmitOnError": false,
     "noFallthroughCasesInSwitch": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     // "noUnusedLocals": true,
     // "noUnusedParameters": true,
     "pretty": true,
     "skipDefaultLibCheck": true,
     "skipLibCheck": true,
-    "target": "es2017"
+    "target": "es2017",
+    "typeRoots": ["node_modules/@types", "./typings"],
+    "resolveJsonModule": true
   },
   "exclude": ["app/public", "app/views"],
   "include": ["app.ts", "app/**/*.ts", "config/**/*.ts", "test/**/*.ts"]

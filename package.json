@@ -9,6 +9,7 @@
     ]
   },
   "dependencies": {
+    "axios": "^0.21.4",
     "egg": "^2.14.2",
     "egg-mongo-native": "^3.3.0",
     "egg-scripts": "^2.11.0",
