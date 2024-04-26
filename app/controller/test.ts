@@ -14,8 +14,7 @@ export default class TestController extends Controller {
       baseUrl,
     }
 
-    ctx.body = resp
-    ctx.status = 200
+    ctx.helper.success({ ctx, res: resp })
   }
 
   // getDog function to call the dog service get resp and return it
