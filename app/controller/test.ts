@@ -21,7 +21,6 @@ export default class TestController extends Controller {
   public async getDog() {
     const { ctx, service } = this;
     const resp = await service.dog.show();
-    ctx.body = resp.message;
-    ctx.status = 200;
+    await ctx.render('test.tpl', { url: resp.message });
   }
 }
