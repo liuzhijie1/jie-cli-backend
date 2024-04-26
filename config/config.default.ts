@@ -5,7 +5,7 @@ export default (appInfo: EggAppInfo) => {
 
   config.keys = appInfo.name + '_1547377172976_3476';
 
-  config.middleware = [];
+  config.middleware = [ 'logger' ];
 
   config.security = {
     csrf: {
