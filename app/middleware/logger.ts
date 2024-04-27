@@ -1,5 +1,5 @@
 // generate egg log middleware
-import { Context, Application } from 'egg'
+import { Application, Context } from 'egg'
 import { appendFileSync } from 'fs'
 export default (options: any, app: Application) => {
   return async (ctx: Context, next: () => Promise<any>) => {

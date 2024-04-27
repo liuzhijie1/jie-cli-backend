@@ -1,4 +1,4 @@
-import { Context } from 'egg';
+import { Context } from 'egg'
 
 module.exports = () => {
   return {
@@ -7,8 +7,8 @@ module.exports = () => {
       type: 'worker',
     },
     async task(ctx: Context): Promise<void> {
-      ctx.service.home.index(); // you can access the service via ctx
-      console.log(`[schedule] Schduled task running.`);
+      ctx.service.home.index() // you can access the service via ctx
+      console.log('[schedule] Schduled task running.')
     },
-  };
-};
+  }
+}

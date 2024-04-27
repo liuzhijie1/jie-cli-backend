@@ -1,5 +1,5 @@
-import { Application } from 'egg'
 import axios, { AxiosInstance } from 'axios'
+import { Application } from 'egg'
 
 const AXIOS = Symbol('Application#axios')
 

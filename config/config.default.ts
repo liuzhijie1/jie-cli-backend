@@ -38,5 +38,5 @@ export default (appInfo: EggAppInfo) => {
     },
   }
 
-  return { ...config as {}, ...bizConfig }
+  return { ...(config as {}), ...bizConfig }
 }

@@ -1,9 +1,9 @@
-import { Context } from 'egg'
+import { Context } from 'egg';
 
 interface RespType {
-  ctx: Context
-  res?: any
-  msg?: string
+  ctx: Context;
+  res?: any;
+  msg?: string;
 }
 
 export default {
@@ -12,7 +12,7 @@ export default {
       errno: 0,
       data: res ? res : null,
       message: msg ? msg : 'success',
-    }
-    ctx.status = 200
+    };
+    ctx.status = 200;
   },
-}
+};
