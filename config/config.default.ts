@@ -20,6 +20,11 @@ export default (appInfo: EggAppInfo) => {
     },
   }
 
+  config.logger = {
+    level: 'DEBUG',
+    consoleLevel: 'DEBUG',
+  }
+
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,
     myLogger: {

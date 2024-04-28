@@ -16,6 +16,11 @@ export default class TestController extends Controller {
     // console.log('axios', res.data)
     // console.log('eco', ctx.application.echo('123123'))
 
+    ctx.logger.debug('debug info')
+    ctx.logger.info('info info')
+    ctx.logger.warn('warn info')
+    // ctx.logger.error(new Error('whiops'))
+
     const resp = {
       query,
       body,
