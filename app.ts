@@ -1,6 +1,7 @@
 import { Application, IBoot } from 'egg'
 import assert from 'assert'
 import { createConnection } from 'mongoose'
+import { join } from 'path'
 
 export default class AppBootHook implements IBoot {
   private readonly app: Application
@@ -27,6 +28,10 @@ export default class AppBootHook implements IBoot {
 
   async willReady(): Promise<void> {
     console.log('enable willready', this.app.config.coreMiddleware)
+    const dir = join(this.app.config.baseDir, 'app/model')
+    this.app.loader.loadToApp(dir, 'model', {
+      caseStyle: 'upper',
+    })
   }
 
   async didReady() {

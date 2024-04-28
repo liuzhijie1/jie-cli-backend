@@ -36,8 +36,9 @@ export default class DogService extends Service {
   }
 
   public async showPlayers() {
-    const Person = this.getPersonModel()
-    const res = await Person.find({}).exec()
+    // const Person = this.getPersonModel()
+    // const res = await Person.find({}).exec()
+    const res = await this.app.model.User.find({}).exec()
     return res
   }
 }
