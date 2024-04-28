@@ -16,6 +16,7 @@ import 'egg-static';
 import 'egg-jsonp';
 import 'egg-view';
 import 'egg-view-nunjucks';
+import 'egg-mongoose';
 import { EggPluginItem } from 'egg';
 declare module 'egg' {
   interface EggPlugin {
@@ -33,5 +34,6 @@ declare module 'egg' {
     view?: EggPluginItem;
     mongo?: EggPluginItem;
     nunjucks?: EggPluginItem;
+    mongoose?: EggPluginItem;
   }
 }

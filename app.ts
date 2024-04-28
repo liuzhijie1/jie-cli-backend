@@ -10,11 +10,6 @@ export default class AppBootHook implements IBoot {
     this.app = app
     const { url } = this.app.config.mongoose
     assert(url, 'mongoose.url is required on config')
-    const db = createConnection(url)
-    db.on('connected', () => {
-      app.logger.info(`[egg-mongoose] ${url} mongoose connected successfully`)
-    })
-    app.mongoose = db
   }
 
   configWillLoad() {
@@ -28,10 +23,10 @@ export default class AppBootHook implements IBoot {
 
   async willReady(): Promise<void> {
     console.log('enable willready', this.app.config.coreMiddleware)
-    const dir = join(this.app.config.baseDir, 'app/model')
-    this.app.loader.loadToApp(dir, 'model', {
-      caseStyle: 'upper',
-    })
+    // const dir = join(this.app.config.baseDir, 'app/model')
+    // this.app.loader.loadToApp(dir, 'model', {
+    //   caseStyle: 'upper',
+    // })
   }
 
   async didReady() {

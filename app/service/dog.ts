@@ -38,6 +38,15 @@ export default class DogService extends Service {
   public async showPlayers() {
     // const Person = this.getPersonModel()
     // const res = await Person.find({}).exec()
+    // const user = new this.app.model.User({
+    //   username: 'jie',
+    //   password: '123456',
+    //   nickName: 'jie',
+    //   picture: 'https://www.baidu.com',
+    //   email: '',
+    //   phoneNumber: '',
+    // })
+    // await user.save()
     const res = await this.app.model.User.find({}).exec()
     return res
   }
