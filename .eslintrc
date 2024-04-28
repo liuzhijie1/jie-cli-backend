@@ -5,7 +5,8 @@
     "@typescript-eslint/semi": ["off", "always"],
     "@typescript-eslint/no-unused-vars": 0,
     "comma-dangle": 0,
-    "@typescript-eslint/no-useless-constructor": "off"
+    "@typescript-eslint/no-useless-constructor": "off",
+    "array-bracket-spacing": "off"
   },
   "parserOptions": {
     "project": "./tsconfig.json"

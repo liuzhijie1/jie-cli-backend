@@ -1,10 +1,19 @@
 import { Application, IBoot } from 'egg'
+import assert from 'assert'
+import { createConnection } from 'mongoose'
 
 export default class AppBootHook implements IBoot {
   private readonly app: Application
 
   constructor(app: Application) {
     this.app = app
+    const { url } = this.app.config.mongoose
+    assert(url, 'mongoose.url is required on config')
+    const db = createConnection(url)
+    db.on('connected', () => {
+      app.logger.info(`[egg-mongoose] ${url} mongoose connected successfully`)
+    })
+    app.mongoose = db
   }
 
   configWillLoad() {

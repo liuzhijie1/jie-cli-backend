@@ -21,6 +21,7 @@
     "skipLibCheck": true,
     "target": "es2017",
     "typeRoots": ["node_modules/@types", "./typings"],
+    "esModuleInterop": true,
     "resolveJsonModule": true
   },
   "exclude": ["app/public", "app/views"],
