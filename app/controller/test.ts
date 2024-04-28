@@ -8,7 +8,7 @@ export default class TestController extends Controller {
     const { baseUrl } = ctx.app.config
 
     console.log('ctx.application', this.app.echo('12'))
-    console.log('ctx.application axios', await this.app.axiosInstance.get('/api/breeds/image/random'))
+    console.log('ctx.application axios', (await this.app.axiosInstance.get('/api/breeds/image/random')).data)
     // console.log(ctx.application.echo('123123'))
     // const res = await ctx.application.axiosInstance.get(
     //   '/api/breeds/image/random'
