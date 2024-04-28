@@ -25,15 +25,16 @@ export default (appInfo: EggAppInfo) => {
     consoleLevel: 'DEBUG',
   }
 
+  config.mongoose = {
+    url: 'mongodb+srv://liu831666:liujie5720@liujiecloudmongoone.rszcpwv.mongodb.net/imooc-test?retryWrites=true&w=majority',
+  }
+
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,
     myLogger: {
       allowedMethods: ['POST'],
     },
     baseUrl: 'default.url',
-    mongoose: {
-      url: 'mongodb+srv://liu831666:liujie5720@liujiecloudmongoone.rszcpwv.mongodb.net/imooc-test?retryWrites=true&w=majority',
-    },
   }
 
   config.mongo = {
