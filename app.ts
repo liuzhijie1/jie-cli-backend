@@ -18,7 +18,7 @@ export default class AppBootHook implements IBoot {
     // this is the last chance to modify the config.
     console.log('config', this.app.config.baseUrl)
     console.log('enable middleware', this.app.config.coreMiddleware)
-    this.app.config.coreMiddleware.unshift('myLogger')
+    // this.app.config.coreMiddleware.unshift('myLogger')
   }
 
   async willReady(): Promise<void> {

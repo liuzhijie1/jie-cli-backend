@@ -29,6 +29,10 @@ export default (appInfo: EggAppInfo) => {
     url: 'mongodb+srv://liu831666:liujie5720@liujiecloudmongoone.rszcpwv.mongodb.net/imooc-test?retryWrites=true&w=majority',
   }
 
+  config.bcrypt = {
+    saltRounds: 10,
+  }
+
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,
     myLogger: {
