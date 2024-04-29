@@ -1,6 +1,7 @@
 // generate User Model
 import { Application } from 'egg'
 import { Schema } from 'mongoose'
+import AutoIncrementFactory from 'mongoose-sequence'
 
 export interface UserProps {
   username: string
@@ -33,6 +34,10 @@ function initUserModel(app: Application) {
       },
     }
   )
+  UserSchema.plugin(AutoIncrementFactory(app.mongoose), {
+    id: 'user_id_counter',
+    inc_field: 'id',
+  })
   return app.mongoose.model<UserProps>('User', UserSchema)
 }
 
