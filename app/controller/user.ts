@@ -49,8 +49,9 @@ export default class UserController extends Controller {
   async show() {
     const { ctx, service } = this
     const { id } = ctx.params
-    const userData = await service.user.findById(id)
-    ctx.helper.success({ ctx, res: userData })
+    const username = ctx.cookies.get('username', { encrypt: true })
+    // const userData = await service.user.findById(id)
+    ctx.helper.success({ ctx, res: username })
   }
 
   validateUserInput() {
@@ -81,6 +82,7 @@ export default class UserController extends Controller {
       ctx.helper.error({ ctx, errorType: 'loginCheckFailInfo' })
       return
     }
+    ctx.cookies.set('username', user.username, { encrypt: true })
     ctx.helper.success({ ctx, res: user.toJSON(), msg: '登录成功' })
   }
 }
