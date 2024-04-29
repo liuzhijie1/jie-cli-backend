@@ -12,4 +12,11 @@ declare module 'egg' {
     genHash(plainText: string): Promise<string>
     compare(plainText: string, hash: string): Promise<boolean>
   }
+
+  interface Application {
+    sessionMap: {
+      [key: string]: string
+    }
+    sessionStore: any
+  }
 }

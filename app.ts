@@ -8,8 +8,25 @@ export default class AppBootHook implements IBoot {
 
   constructor(app: Application) {
     this.app = app
-    const { url } = this.app.config.mongoose
-    assert(url, 'mongoose.url is required on config')
+    // const { url } = this.app.config.mongoose
+    // assert(url, 'mongoose.url is required on config')
+    app.sessionMap = {}
+    app.sessionStore = {
+      async get(key) {
+        app.logger.info(`sessionStore get key ${key}`)
+        return app.sessionMap[key]
+      },
+      async set(key, value, maxAge) {
+        app.logger.info(
+          `sessionStore set key ${key} value ${value} maxAge ${maxAge}`
+        )
+        app.sessionMap[key] = value
+      },
+      async destroy(key) {
+        app.logger.info(`sessionStore destroy key ${key}`)
+        delete app.sessionMap[key]
+      },
+    }
   }
 
   configWillLoad() {

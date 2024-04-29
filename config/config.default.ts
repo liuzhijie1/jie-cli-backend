@@ -33,6 +33,10 @@ export default (appInfo: EggAppInfo) => {
     saltRounds: 10,
   }
 
+  config.session = {
+    encrypt: false,
+  }
+
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,
     myLogger: {
