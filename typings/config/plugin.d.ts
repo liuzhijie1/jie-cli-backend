@@ -32,7 +32,6 @@ declare module 'egg' {
     static?: EggPluginItem;
     jsonp?: EggPluginItem;
     view?: EggPluginItem;
-    mongo?: EggPluginItem;
     nunjucks?: EggPluginItem;
     mongoose?: EggPluginItem;
   }
