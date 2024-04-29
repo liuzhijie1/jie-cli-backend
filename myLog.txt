@@ -5,3 +5,6 @@ request as Fri Apr 26 2024 16:10:31 GMT+0800 (China Standard Time) GET /dog 1279
 request as Mon Apr 29 2024 14:08:31 GMT+0800 (China Standard Time) POST /api/users/create 352ms
 request as Mon Apr 29 2024 15:03:56 GMT+0800 (China Standard Time) POST /api/users/create 948ms
 request as Mon Apr 29 2024 15:06:20 GMT+0800 (China Standard Time) POST /api/users/create 338ms
+request as Mon Apr 29 2024 15:40:50 GMT+0800 (China Standard Time) POST /api/users/create 19ms
+request as Mon Apr 29 2024 15:41:00 GMT+0800 (China Standard Time) POST /api/users/create 3ms
+request as Mon Apr 29 2024 15:41:07 GMT+0800 (China Standard Time) POST /api/users/create 623ms
