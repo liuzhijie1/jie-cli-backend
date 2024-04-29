@@ -81,6 +81,6 @@ export default class UserController extends Controller {
       ctx.helper.error({ ctx, errorType: 'loginCheckFailInfo' })
       return
     }
-    ctx.helper.success({ ctx, res: user, msg: '登录成功' })
+    ctx.helper.success({ ctx, res: user.toJSON(), msg: '登录成功' })
   }
 }
