@@ -9,6 +9,14 @@ const userCreateRule = {
   },
 }
 
+const sendCodeRules = {
+  phoneNumber: {
+    type: 'string',
+    format: /^1[3-9]\d{9}$/,
+    message: '手机号码格式错误',
+  },
+}
+
 export const userErrorMessage = {
   userValidateFail: {
     errno: 101001,
@@ -25,6 +33,10 @@ export const userErrorMessage = {
   loginValidateFail: {
     errno: 101004,
     message: '登录信息验证失败',
+  },
+  sendCodeFrequentFailInfo: {
+    errno: 101005,
+    message: '请勿频繁获取短信验证码',
   },
 }
 
@@ -77,16 +89,16 @@ export default class UserController extends Controller {
     ctx.helper.success({ ctx, res: userData.toJSON() })
   }
 
-  validateUserInput() {
+  validateUserInput(rules: any) {
     const { ctx, app } = this
-    const errors = app.validator.validate(userCreateRule, ctx.request.body)
+    const errors = app.validator.validate(rules, ctx.request.body)
     ctx.logger.warn(errors)
     return errors
   }
 
   async loginByEmail() {
     const { ctx, service, app } = this
-    const error = this.validateUserInput()
+    const error = this.validateUserInput(userCreateRule)
     if (error) {
       ctx.helper.error({
         ctx,
@@ -119,5 +131,25 @@ export default class UserController extends Controller {
       }
     )
     ctx.helper.success({ ctx, res: { token }, msg: '登录成功' })
+  }
+  async sendVeriCode() {
+    const { ctx, app } = this
+    const error = this.validateUserInput(sendCodeRules)
+    if (error) {
+      ctx.helper.error({
+        ctx,
+        error,
+        errorType: 'userValidateFail',
+      })
+    }
+    const { phoneNumber } = ctx.request.body
+    const preVeriCode = await app.redis.get(`phoneVeriCode-${phoneNumber}`)
+    if (preVeriCode) {
+      ctx.helper.error({ ctx, errorType: 'sendCodeFrequentFailInfo' })
+      return
+    }
+    const veriCode = Math.floor(Math.random() * 9000 + 1000).toString()
+    await app.redis.set(`phoneVeriCode-${phoneNumber}`, veriCode, 'ex', 60)
+    ctx.helper.success({ ctx, res: { veriCode }, msg: '验证码发送成功' })
   }
 }

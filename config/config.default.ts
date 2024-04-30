@@ -1,4 +1,5 @@
 import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg'
+import Redis from 'ioredis'
 
 export default (appInfo: EggAppInfo) => {
   const config: PowerPartial<EggAppConfig> = {}
@@ -39,6 +40,16 @@ export default (appInfo: EggAppInfo) => {
 
   config.jwt = {
     secret: '1234567890',
+  }
+
+  config.redis = {
+    client: {
+      port: 19996, // Redis port
+      host: 'redis-141419-0.cloudclusters.net', // Redis host
+      password: 'liujie5720',
+      name: 'admin',
+      db: 0,
+    },
   }
 
   const bizConfig = {
