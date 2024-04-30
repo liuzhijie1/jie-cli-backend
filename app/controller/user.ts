@@ -1,4 +1,5 @@
 import { Controller } from 'egg'
+import { sign, verify } from 'jsonwebtoken'
 
 const userCreateRule = {
   username: 'email',
@@ -51,16 +52,27 @@ export default class UserController extends Controller {
   }
 
   async show() {
-    const { ctx, service } = this
+    const { ctx, service, app } = this
     const { id } = ctx.params
     // const username = ctx.cookies.get('username', { encrypt: true })
     // const userData = await service.user.findById(id)
-    const { username } = ctx.session
-    if (!username) {
+    // const { username } = ctx.session
+    // if (!username) {
+    //   ctx.helper.error({ ctx, errorType: 'loginValidateFail' })
+    //   return
+    // }
+    // ctx.helper.success({ ctx, res: username })
+    const token = this.getTokenValue()
+    if (!token) {
       ctx.helper.error({ ctx, errorType: 'loginValidateFail' })
       return
     }
-    ctx.helper.success({ ctx, res: username })
+    try {
+      const decoded = verify(token, app.config.jwt.secret)
+      ctx.helper.success({ ctx, res: decoded })
+    } catch (error) {
+      return ctx.helper.error({ ctx, error, errorType: 'loginValidateFail' })
+    }
   }
 
   validateUserInput() {
@@ -92,7 +104,31 @@ export default class UserController extends Controller {
       return
     }
     // ctx.cookies.set('username', user.username, { encrypt: true })
-    ctx.session.username = user.username
-    ctx.helper.success({ ctx, res: user.toJSON(), msg: '登录成功' })
+    // ctx.session.username = user.username
+    // ctx.helper.success({ ctx, res: user.toJSON(), msg: '登录成功' })
+    const token = sign({ username: user.username }, app.config.jwt.secret, {
+      expiresIn: 60 * 60,
+    })
+    ctx.helper.success({ ctx, res: { token }, msg: '登录成功' })
+  }
+  getTokenValue() {
+    const { ctx, app } = this
+    const { authorization } = ctx.header
+    if (!ctx.header || !authorization) {
+      return false
+    }
+    if (typeof authorization !== 'string') {
+      return false
+    }
+    const parts = authorization.trim().split(' ')
+    if (parts.length !== 2) {
+      return false
+    }
+    const scheme = parts[0]
+    const credentials = parts[1]
+    if (!/^Bearer$/i.test(scheme)) {
+      return false
+    }
+    return credentials
   }
 }
