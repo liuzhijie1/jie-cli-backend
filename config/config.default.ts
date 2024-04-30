@@ -1,5 +1,4 @@
 import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg'
-import Redis from 'ioredis'
 
 export default (appInfo: EggAppInfo) => {
   const config: PowerPartial<EggAppConfig> = {}
