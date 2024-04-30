@@ -5,7 +5,7 @@ export default (appInfo: EggAppInfo) => {
 
   config.keys = appInfo.name + '_1547377172976_3476'
 
-  config.middleware = []
+  config.middleware = ['customError']
 
   config.security = {
     csrf: {
@@ -37,15 +37,16 @@ export default (appInfo: EggAppInfo) => {
     encrypt: false,
   }
 
+  config.jwt = {
+    secret: '1234567890',
+  }
+
   const bizConfig = {
     sourceUrl: `https://github.com/eggjs/examples/tree/master/${appInfo.name}`,
     myLogger: {
       allowedMethods: ['POST'],
     },
     baseUrl: 'default.url',
-    jwt: {
-      secret: '1234567890',
-    },
   }
 
   config.mongo = {
