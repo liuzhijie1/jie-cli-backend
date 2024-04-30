@@ -43,7 +43,9 @@ export default (appInfo: EggAppInfo) => {
       allowedMethods: ['POST'],
     },
     baseUrl: 'default.url',
-    secret: '1234567890'
+    jwt: {
+      secret: '1234567890',
+    },
   }
 
   config.mongo = {

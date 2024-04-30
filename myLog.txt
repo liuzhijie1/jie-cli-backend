@@ -17,3 +17,5 @@ request as Mon Apr 29 2024 17:38:28 GMT+0800 (China Standard Time) POST /api/use
 request as Mon Apr 29 2024 17:41:08 GMT+0800 (China Standard Time) POST /api/users/login 323ms
 request as Mon Apr 29 2024 17:41:24 GMT+0800 (China Standard Time) POST /api/users/create 3452ms
 request as Mon Apr 29 2024 17:41:51 GMT+0800 (China Standard Time) POST /api/users/login 391ms
+request as Tue Apr 30 2024 14:24:25 GMT+0800 (China Standard Time) GET /dog 856ms
+request as Tue Apr 30 2024 14:25:10 GMT+0800 (China Standard Time) GET /dog 943ms

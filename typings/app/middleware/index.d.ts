@@ -3,11 +3,13 @@
 /* eslint-disable */
 
 import 'egg';
+import ExportJwt from '../../../app/middleware/jwt';
 import ExportLogger from '../../../app/middleware/logger';
 import ExportMyLogger from '../../../app/middleware/myLogger';
 
 declare module 'egg' {
   interface IMiddleware {
+    jwt: typeof ExportJwt;
     logger: typeof ExportLogger;
     myLogger: typeof ExportMyLogger;
   }
