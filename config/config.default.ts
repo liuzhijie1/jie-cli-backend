@@ -46,8 +46,12 @@ export default (appInfo: EggAppInfo) => {
       port: 19996, // Redis port
       host: 'redis-141419-0.cloudclusters.net', // Redis host
       password: 'liujie5720',
-      name: 'admin',
       db: 0,
+      username: 'admin',
+      tls: {
+        rejectUnauthorized: false,
+      },
+      connectTimeout: 50000,
     },
   }
 
