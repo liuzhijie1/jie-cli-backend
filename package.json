@@ -33,7 +33,7 @@
     "eslint-config-egg": "^8.0.0",
     "tslib": "^1.9.3",
     "tslint": "^5.12.1",
-    "typescript": "^3.2.2"
+    "typescript": "^4.4.3"
   },
   "engines": {
     "node": ">=8.9.0"

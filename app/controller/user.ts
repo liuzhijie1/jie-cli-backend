@@ -14,6 +14,7 @@ const sendCodeRules = {
     type: 'string',
     format: /^1[3-9]\d{9}$/,
     message: '手机号码格式错误',
+    required: true,
   },
 }
 
@@ -105,6 +106,7 @@ export default class UserController extends Controller {
         error,
         errorType: 'userValidateFail',
       })
+      return
     }
     const { username, password } = ctx.request.body
     const user = await service.user.findByUsername(username)
@@ -141,6 +143,7 @@ export default class UserController extends Controller {
         error,
         errorType: 'userValidateFail',
       })
+      return
     }
     const { phoneNumber } = ctx.request.body
     const preVeriCode = await app.redis.get(`phoneVeriCode-${phoneNumber}`)
