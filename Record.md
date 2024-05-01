@@ -6,4 +6,4 @@
 
 将tslint迁移到eslint
 
-解决egg-mongoose中的mongoose版本和本地开发安装的mongoose版本不匹配导致的问题
+解决egg-mongoose中的mongoose版本和本地开发安装的mongoose版本不匹配导致的问题 
