@@ -49,6 +49,12 @@ export default class AppBootHook implements IBoot {
   async didReady() {
     const ctx = await this.app.createAnonymousContext()
     const res = await ctx.service.test.sayHi('jie')
+    try {
+      await this.app.redis.ping()
+      console.log('redis链接成功')
+    } catch (error) {
+      console.log('redis链接失败')
+    }
     console.log('didReady', this.app.echo)
     console.log('did ready res', res)
     console.log('final middlewares', this.app.middleware)
