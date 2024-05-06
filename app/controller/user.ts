@@ -18,6 +18,21 @@ const sendCodeRules = {
   },
 }
 
+const userPhoneCreateRule = {
+  phoneNumber: {
+    type: 'string',
+    format: /^1[3-9]\d{9}$/,
+    message: '手机号码格式错误',
+    required: true,
+  },
+  veriCode: {
+    type: 'string',
+    format: /^\d{4}$/,
+    message: '验证码格式错误',
+    required: true,
+  },
+}
+
 export const userErrorMessage = {
   userValidateFail: {
     errno: 101001,
@@ -38,6 +53,10 @@ export const userErrorMessage = {
   sendCodeFrequentFailInfo: {
     errno: 101005,
     message: '请勿频繁获取短信验证码',
+  },
+  loginVeriCodeIncorrectFailInfo: {
+    errno: 101006,
+    message: '验证码错误',
   },
 }
 
@@ -154,5 +173,25 @@ export default class UserController extends Controller {
     const veriCode = Math.floor(Math.random() * 9000 + 1000).toString()
     await app.redis.set(`phoneVeriCode-${phoneNumber}`, veriCode, 'ex', 60)
     ctx.helper.success({ ctx, res: { veriCode }, msg: '验证码发送成功' })
+  }
+  async loginByCellphone() {
+    const { ctx, app } = this
+    const error = this.validateUserInput(userPhoneCreateRule)
+    if (error) {
+      ctx.helper.error({
+        ctx,
+        error,
+        errorType: 'userValidateFail',
+      })
+      return
+    }
+    const { phoneNumber, veriCode } = ctx.request.body
+    const preVeriCode = await app.redis.get(`phoneVeriCode-${phoneNumber}`)
+    if (preVeriCode !== veriCode) {
+      ctx.helper.error({ ctx, errorType: 'loginVeriCodeIncorrectFailInfo' })
+      return
+    }
+    const token = await ctx.service.user.loginByCellphone(phoneNumber)
+    ctx.helper.success({ ctx, res: { token }, msg: '登录成功' })
   }
 }

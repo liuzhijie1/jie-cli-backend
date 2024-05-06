@@ -22,4 +22,29 @@ export default class UserService extends Service {
   async findByUsername(username: string) {
     return this.ctx.model.User.findOne({ username })
   }
+
+  async loginByCellphone(cellphone: string) {
+    const { ctx, app } = this
+    const user = await this.findByUsername(cellphone)
+    if (user) {
+      const token = app.jwt.sign(
+        { username: user.username },
+        app.config.jwt.secret
+      )
+      return token
+    }
+    const userCreatedData: Partial<UserProps> = {
+      username: cellphone,
+      phoneNumber: cellphone,
+      nickName: `乐高${cellphone.slice(-4)}`,
+      type: 'cellphone',
+    }
+    console.log(userCreatedData)
+    const newUser = await ctx.model.User.create(userCreatedData)
+    const token = app.jwt.sign(
+      { username: newUser.username },
+      app.config.jwt.secret
+    )
+    return token
+  }
 }
