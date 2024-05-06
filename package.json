@@ -19,6 +19,7 @@
     "egg-validate": "^2.0.2",
     "egg-view-nunjucks": "^2.3.0",
     "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.9",
     "mongoose-sequence": "^5.3.1"
   },
   "devDependencies": {
