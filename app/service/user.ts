@@ -28,7 +28,7 @@ export default class UserService extends Service {
     const user = await this.findByUsername(cellphone)
     if (user) {
       const token = app.jwt.sign(
-        { username: user.username },
+        { username: user.username, _id: user._id },
         app.config.jwt.secret
       )
       return token
@@ -42,7 +42,7 @@ export default class UserService extends Service {
     console.log(userCreatedData)
     const newUser = await ctx.model.User.create(userCreatedData)
     const token = app.jwt.sign(
-      { username: newUser.username },
+      { username: newUser.username, _id: newUser._id},
       app.config.jwt.secret
     )
     return token

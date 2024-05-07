@@ -10,6 +10,8 @@ export default (app: Application) => {
 
   // console.log('app.config.jwt', jwt)
 
+  const jwtMiddleware = app.jwt as any
+
   router.get('/', controller.home.index)
   // router.get('/test/:id', controller.test.index)
   // router.post('/test/:id', controller.test.index)
@@ -19,9 +21,11 @@ export default (app: Application) => {
 
   router.get('/api/users/current', controller.user.show)
   router.post('/api/users/login', controller.user.loginByEmail)
-  router.get('/api/users/getUserInfo', app.jwt as any, controller.user.show)
+  router.get('/api/users/getUserInfo', jwtMiddleware, controller.user.show)
   router.post('/api/users/loginByEmail', controller.user.loginByEmail)
   router.post('/api/users/genVeriCode', controller.user.sendVeriCode)
   router.post('/api/users/loginByPhoneNumber', controller.user.loginByCellphone)
-  router.get('/api/users/:id', controller.user.show)
+
+  router.post('/api/works', jwtMiddleware, controller.work.createWork)
+  // router.get('/api/users/:id', controller.user.show)
 }

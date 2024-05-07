@@ -153,7 +153,7 @@ export default class UserController extends Controller {
     //   expiresIn: 60 * 60,
     // })
     const token = app.jwt.sign(
-      { username: user.username },
+      { username: user.username, _id: user._id },
       app.config.jwt.secret,
       {
         expiresIn: 60 * 60,
