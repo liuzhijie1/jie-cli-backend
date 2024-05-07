@@ -62,6 +62,10 @@ export const userErrorMessage = {
     errno: 101007,
     message: '验证码发送失败',
   },
+  giteeOauthError: {
+    errno: 101008,
+    message: 'Gitee授权失败',
+  },
 }
 
 export default class UserController extends Controller {
