@@ -44,6 +44,11 @@ export default (appInfo: EggAppInfo) => {
     secret: '1234567890',
   }
 
+  config.cors = {
+    origin: 'http://localhost:8080',
+    allowMethods: 'GET,HEAD,PUT,OPTIONS,POST,DELETE,PATCH',
+  }
+
   config.redis = {
     client: {
       port: 19996, // Redis port
