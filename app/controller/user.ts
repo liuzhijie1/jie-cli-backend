@@ -58,6 +58,10 @@ export const userErrorMessage = {
     errno: 101006,
     message: '验证码错误',
   },
+  sendVeriCodeError: {
+    errno: 101007,
+    message: '验证码发送失败',
+  },
 }
 
 export default class UserController extends Controller {
