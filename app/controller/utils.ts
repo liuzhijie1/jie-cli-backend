@@ -1,6 +1,8 @@
 import { Controller } from 'egg'
 import sharp from 'sharp'
-import { parse, join } from 'path'
+import { parse, join, extname } from 'path'
+import { createWriteStream } from 'fs'
+import { nanoid } from 'nanoid'
 
 export default class UtilsController extends Controller {
   async fileLocalUpload() {
@@ -31,6 +33,43 @@ export default class UtilsController extends Controller {
     ctx.helper.success({
       ctx,
       res: { url, thumbnailUrl: thumbnailUrl ? thumbnailUrl : url },
+    })
+  }
+  pathToURL(path: string) {
+    return path.replace(this.app.config.baseDir, this.app.config.baseUrl)
+  }
+  async fileUploadByStream() {
+    const { ctx, app } = this
+    const stream = await ctx.getFileStream()
+    // uploads/***.ext
+    // uploads/xxx_thumbnail.ext
+    const ext = extname(stream.filename)
+    const name = nanoid(6)
+    const filename = `${name}${ext}`
+    const savedFilePath = join(app.config.baseDir, 'uploads', filename)
+    const savedThumbnailPath = join(
+      app.config.baseDir,
+      'uploads',
+      `${name}_thumbnail${ext}`
+    )
+    const target = createWriteStream(savedFilePath)
+    const target2 = createWriteStream(savedThumbnailPath)
+
+    const savePromise = await new Promise((resolve, reject) => {
+      stream.pipe(target)
+      stream.on('finish', resolve)
+      stream.on('error', reject)
+    })
+    const transformer = sharp().resize({ width: 300 })
+    // const thumbnailPromise = await new Promise((resolve, reject) => {
+    //   stream.pipe(transformer).pipe(target2)
+    //   target2.on('finish', resolve)
+    //   target2.on('error', reject)
+    // })
+    // 生成缩略图
+    ctx.helper.success({
+      ctx,
+      res: { url: this.pathToURL(savedFilePath), thumbnailUrl: this.pathToURL(savedThumbnailPath) },
     })
   }
 }

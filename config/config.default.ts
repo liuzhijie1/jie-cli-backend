@@ -45,10 +45,11 @@ export default (appInfo: EggAppInfo) => {
     secret: '1234567890',
   }
 
-  config.multipart = {
-    mode: 'file',
-    tmpdir: join(appInfo.baseDir, 'uploads'),
-  }
+  // egg 的文件上传配置 默认的mode 是 stream
+  // config.multipart = {
+  //   mode: 'file',
+  //   tmpdir: join(appInfo.baseDir, 'uploads'),
+  // }
 
   config.static = {
     dir: [
