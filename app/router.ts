@@ -18,13 +18,13 @@ export default (app: Application) => {
   // router.get('/dog', myLogger, controller.test.getDog)
 
   router.post('/api/users/create', controller.user.createByEmail)
-
   router.get('/api/users/current', controller.user.show)
   router.post('/api/users/login', controller.user.loginByEmail)
   router.get('/api/users/getUserInfo', jwtMiddleware, controller.user.show)
   router.post('/api/users/loginByEmail', controller.user.loginByEmail)
   router.post('/api/users/genVeriCode', controller.user.sendVeriCode)
   router.post('/api/users/loginByPhoneNumber', controller.user.loginByCellphone)
+  // router.get('/api/users/:id', controller.user.show)
 
   router.post('/api/works', jwtMiddleware, controller.work.createWork)
   router.get('/api/works', jwtMiddleware, controller.work.myList)
@@ -36,5 +36,6 @@ export default (app: Application) => {
   router.post('/api/works/copy/:id', jwtMiddleware, controller.work.copyWork)
   router.get('/api/works/:id', jwtMiddleware, controller.work.myWork)
   router.get('/api/templates/:id', controller.work.template)
-  // router.get('/api/users/:id', controller.user.show)
+  
+  router.post('/api/utils/upload', controller.utils.fileLocalUpload)
 }

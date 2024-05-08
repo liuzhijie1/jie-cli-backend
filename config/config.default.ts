@@ -1,5 +1,6 @@
 import { EggAppConfig, EggAppInfo, PowerPartial } from 'egg'
 import * as dotenv from 'dotenv'
+import { join } from 'path'
 
 dotenv.config()
 
@@ -42,6 +43,18 @@ export default (appInfo: EggAppInfo) => {
 
   config.jwt = {
     secret: '1234567890',
+  }
+
+  config.multipart = {
+    mode: 'file',
+    tmpdir: join(appInfo.baseDir, 'uploads'),
+  }
+
+  config.static = {
+    dir: [
+      { prefix: '/public', dir: join(appInfo.baseDir, 'app/public') },
+      { prefix: '/uploads', dir: join(appInfo.baseDir, 'uploads') },
+    ]
   }
 
   config.cors = {
