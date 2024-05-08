@@ -60,4 +60,38 @@ export default class WorkController extends Controller {
     const workList = await service.work.getList(condition)
     ctx.helper.success({ ctx, res: workList })
   }
+  async checkPermission(id: number) {
+    const { ctx } = this
+    const userId = ctx.state.user._id
+    const certianWork = await ctx.model.Work.findOne({ id })
+    if (!certianWork) {
+      return false
+    }
+    return certianWork.user.toString() === userId.toString()
+  }
+  async update() {
+    const { ctx } = this
+    const { id } = ctx.params
+    const hasPermission = await this.checkPermission(Number(id))
+    if (!hasPermission) {
+      ctx.helper.error({ ctx, errorType: 'workNoPermissionFail' })
+      return
+    }
+    const payload = ctx.request.body
+    const workData = await ctx.model.Work.findOneAndUpdate({ id }, payload, {
+      new: true,
+    }).lean()
+    ctx.helper.success({ ctx, res: workData })
+  }
+  async delete() {
+    const { ctx } = this
+    const { id } = ctx.params
+    const hasPermission = await this.checkPermission(Number(id))
+    if (!hasPermission) {
+      ctx.helper.error({ ctx, errorType: 'workNoPermissionFail' })
+      return
+    }
+    const res = await ctx.model.Work.findOneAndDelete({ id }).select('_id id title').lean()
+    ctx.helper.success({ ctx, res })
+  }
 }
