@@ -1,5 +1,6 @@
 import { Controller } from 'egg'
 import validateInput from '../decorator/inputValidate'
+import checkPermission from '../decorator/checkPermission'
 
 const workCreateRules = {
   title: 'string',
@@ -60,38 +61,45 @@ export default class WorkController extends Controller {
     const workList = await service.work.getList(condition)
     ctx.helper.success({ ctx, res: workList })
   }
-  async checkPermission(id: number) {
-    const { ctx } = this
-    const userId = ctx.state.user._id
-    const certianWork = await ctx.model.Work.findOne({ id })
-    if (!certianWork) {
-      return false
-    }
-    return certianWork.user.toString() === userId.toString()
-  }
+  // async checkPermission(id: number) {
+  //   const { ctx } = this
+  //   const userId = ctx.state.user._id
+  //   const certianWork = await ctx.model.Work.findOne({ id })
+  //   if (!certianWork) {
+  //     return false
+  //   }
+  //   return certianWork.user.toString() === userId.toString()
+  // }
+  @checkPermission('Work', 'workNoPermissionFail')
   async update() {
     const { ctx } = this
     const { id } = ctx.params
-    const hasPermission = await this.checkPermission(Number(id))
-    if (!hasPermission) {
-      ctx.helper.error({ ctx, errorType: 'workNoPermissionFail' })
-      return
-    }
     const payload = ctx.request.body
     const workData = await ctx.model.Work.findOneAndUpdate({ id }, payload, {
       new: true,
     }).lean()
     ctx.helper.success({ ctx, res: workData })
   }
+  @checkPermission('Work', 'workNoPermissionFail')
   async delete() {
     const { ctx } = this
     const { id } = ctx.params
-    const hasPermission = await this.checkPermission(Number(id))
-    if (!hasPermission) {
-      ctx.helper.error({ ctx, errorType: 'workNoPermissionFail' })
-      return
-    }
-    const res = await ctx.model.Work.findOneAndDelete({ id }).select('_id id title').lean()
+    const res = await ctx.model.Work.findOneAndDelete({ id })
+      .select('_id id title')
+      .lean()
     ctx.helper.success({ ctx, res })
+  }
+  @checkPermission('Work', 'workNoPermissionFail')
+  async publish(isTemplate: boolean) {
+    const { ctx, service } = this
+    const { id } = ctx.params
+    const url = await service.work.publish(Number(id), isTemplate)
+    ctx.helper.success({ ctx, res: { url } })
+  }
+  async publishWork() {
+    await this.publish(false)
+  }
+  async publishTemplate() {
+    await this.publish(true)
   }
 }

@@ -69,6 +69,7 @@ export default (appInfo: EggAppInfo) => {
       allowedMethods: ['POST'],
     },
     baseUrl: 'default.url',
+    H5BaseURL: 'http://localhost:7001/api/pages'
   }
 
   config.mongo = {

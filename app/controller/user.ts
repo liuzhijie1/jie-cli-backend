@@ -41,7 +41,7 @@ export default class UserController extends Controller {
     const { username } = ctx.request.body
     const user = await service.user.findByUsername(username)
     if (user) {
-      ctx.helper.error({ ctx, errorType: 'createUserAlreadyExist' })
+      ctx.helper.error({ ctx, errorType: 'createUserAlreadyExists' })
       return
     }
     const userData = await service.user.createByEmail(ctx.request.body)
@@ -116,7 +116,7 @@ export default class UserController extends Controller {
     const { phoneNumber } = ctx.request.body
     const preVeriCode = await app.redis.get(`phoneVeriCode-${phoneNumber}`)
     if (preVeriCode) {
-      ctx.helper.error({ ctx, errorType: 'sendCodeFrequentFailInfo' })
+      ctx.helper.error({ ctx, errorType: 'sendVeriCodeFrequentlyFailInfo' })
       return
     }
     const veriCode = Math.floor(Math.random() * 9000 + 1000).toString()
