@@ -1,9 +1,10 @@
-import { userErrorMessage } from "../controller/user";
-import { workErrorMessage } from "../controller/work";
+import { userErrorMessages } from './user'
+import { workErrorMessages } from './work'
 
-export type GlobalErrorTypes = keyof (typeof userErrorMessage & typeof workErrorMessage)
+export type GlobalErrorTypes = keyof (typeof userErrorMessages &
+  typeof workErrorMessages)
 
-export const globalErrorMessage = {
-  ...userErrorMessage,
-  ...workErrorMessage,
+export const globalErrorMessages = {
+  ...userErrorMessages,
+  ...workErrorMessages,
 }

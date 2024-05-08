@@ -30,17 +30,17 @@ export default class WorkService extends Service {
   async getList(condition: IndexCondition) {
     const fcondition = { ...defaultIndexCondition, ...condition }
     const { pageIndex, pageSize, select, populate, customSort, find } =
-      condition
+      fcondition
     const skip = pageIndex * pageSize
     const { ctx } = this
-    const res = ctx.model.Work.find(find)
+    const res = await ctx.model.Work.find(find)
       .select(select)
       .populate(populate)
-      .sort(customSort)
-      .skip(pageIndex * pageSize)
+      .skip(skip)
       .limit(pageSize)
+      .sort(customSort)
       .lean()
-    const count = ctx.model.Work.find(find).count()
+    const count = await ctx.model.Work.find(find).count()
     return { count, list: res, pageSize, pageIndex }
   }
 }

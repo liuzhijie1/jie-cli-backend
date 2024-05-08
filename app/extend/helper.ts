@@ -1,5 +1,5 @@
 import { Context } from 'egg'
-import { GlobalErrorTypes, globalErrorMessage } from '../error'
+import { GlobalErrorTypes, globalErrorMessages } from '../error'
 
 interface RespType {
   ctx: Context
@@ -25,7 +25,7 @@ export default {
     ctx.status = 200
   },
   error({ ctx, error, errorType }: ErrorRespType) {
-    const { message, errno } = globalErrorMessage[errorType]
+    const { message, errno } = globalErrorMessages[errorType]
     ctx.body = {
       errno,
       message,
