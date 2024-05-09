@@ -55,21 +55,26 @@ export default class UtilsController extends Controller {
     const target = createWriteStream(savedFilePath)
     const target2 = createWriteStream(savedThumbnailPath)
 
-    const savePromise = await new Promise((resolve, reject) => {
-      stream.pipe(target)
-      stream.on('finish', resolve)
-      stream.on('error', reject)
+    // 这里需要注意对流需要同时进行两次处理，所以需要两个 Promise， 不然的话会报错
+    const savePromise = new Promise((resolve, reject) => {
+      stream.pipe(target).on('finish', resolve).on('error', reject)
     })
     const transformer = sharp().resize({ width: 300 })
-    // const thumbnailPromise = await new Promise((resolve, reject) => {
-    //   stream.pipe(transformer).pipe(target2)
-    //   target2.on('finish', resolve)
-    //   target2.on('error', reject)
-    // })
+    const thumbnailPromise = new Promise((resolve, reject) => {
+      stream
+        .pipe(transformer)
+        .pipe(target2)
+        .on('finish', resolve)
+        .on('error', reject)
+    })
+    await Promise.all([savePromise, thumbnailPromise])
     // 生成缩略图
     ctx.helper.success({
       ctx,
-      res: { url: this.pathToURL(savedFilePath), thumbnailUrl: this.pathToURL(savedThumbnailPath) },
+      res: {
+        url: this.pathToURL(savedFilePath),
+        thumbnailUrl: this.pathToURL(savedThumbnailPath),
+      },
     })
   }
 }
