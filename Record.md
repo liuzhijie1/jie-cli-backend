@@ -7,3 +7,6 @@
 将tslint迁移到eslint
 
 解决egg-mongoose中的mongoose版本和本地开发安装的mongoose版本不匹配导致的问题 
+
+SMS 短信服务   跳过
+OSS 文件服务   跳过
