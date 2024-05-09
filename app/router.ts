@@ -50,4 +50,5 @@ export default (app: Application) => {
   // TODO oss upload
   // router.post('/api/utils/upload-oss', controller.utils.fileOssUpload)
   router.post('/api/utils/upload-busboy', controller.utils.testBusBoy)
+  router.post('/api/utils/upload-img', controller.utils.uploadMultipleFiles)
 }

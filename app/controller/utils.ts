@@ -5,6 +5,7 @@ import { createWriteStream, createReadStream } from 'fs'
 import { nanoid } from 'nanoid'
 import { pipeline } from 'stream/promises'
 import Busboy from 'busboy'
+import { FileStream } from '../../typings/app'
 
 export default class UtilsController extends Controller {
   async fileLocalUpload() {
@@ -137,5 +138,41 @@ export default class UtilsController extends Controller {
       })
       ctx.req.pipe(busboy)
     })
+  }
+  async uploadMultipleFiles() {
+    const { ctx, app } = this
+    const parts = ctx.multipart()
+    const urls: string[] = []
+    let part: FileStream | string[]
+    while ((part = await parts())) {
+      if (typeof part === 'string') {
+        continue
+      }
+      if (Array.isArray(part)) {
+        app.logger.info('part', part)
+        continue
+      }
+      const ext = extname(part.filename)
+      const name = nanoid(6)
+      const savePath = join(app.config.baseDir, 'uploads', `${name}${ext}`)
+      const saveThumbnailPath = join(
+        app.config.baseDir,
+        'uploads',
+        `${name}_thumbnail${ext}`
+      )
+      const target = createWriteStream(savePath)
+      const target2 = createWriteStream(saveThumbnailPath)
+      const transformer = sharp().resize({ width: 300 })
+      const savePromise = pipeline(part, target)
+      const thumbnailPromise = pipeline(part, transformer, target2)
+      try {
+        await Promise.all([savePromise, thumbnailPromise])
+      } catch (error) {
+        return ctx.helper.error({ ctx, error, errorType: 'imageUploadFail' })
+      }
+      urls.push(this.pathToURL(savePath))
+      urls.push(this.pathToURL(saveThumbnailPath))
+    }
+    ctx.helper.success({ ctx, res: { urls } })
   }
 }
