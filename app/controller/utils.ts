@@ -1,8 +1,9 @@
 import { Controller } from 'egg'
 import sharp from 'sharp'
 import { parse, join, extname } from 'path'
-import { createWriteStream } from 'fs'
+import { createWriteStream, createReadStream } from 'fs'
 import { nanoid } from 'nanoid'
+import { pipeline } from 'stream/promises'
 
 export default class UtilsController extends Controller {
   async fileLocalUpload() {
@@ -56,18 +57,25 @@ export default class UtilsController extends Controller {
     const target2 = createWriteStream(savedThumbnailPath)
 
     // 这里需要注意对流需要同时进行两次处理，所以需要两个 Promise， 不然的话会报错
-    const savePromise = new Promise((resolve, reject) => {
-      stream.pipe(target).on('finish', resolve).on('error', reject)
-    })
+    // const savePromise = new Promise((resolve, reject) => {
+    //   stream.pipe(target).on('finish', resolve).on('error', reject)
+    // })
+    const savePromise = pipeline(stream, target)
     const transformer = sharp().resize({ width: 300 })
-    const thumbnailPromise = new Promise((resolve, reject) => {
-      stream
-        .pipe(transformer)
-        .pipe(target2)
-        .on('finish', resolve)
-        .on('error', reject)
-    })
-    await Promise.all([savePromise, thumbnailPromise])
+    // const thumbnailPromise = new Promise((resolve, reject) => {
+    //   stream
+    //     .pipe(transformer)
+    //     .pipe(target2)
+    //     .on('finish', resolve)
+    //     .on('error', reject)
+    // })
+    // await Promise.all([savePromise, thumbnailPromise])
+    const thumbnailPromise = pipeline(stream, transformer, target2)
+    try {
+      await Promise.all([savePromise, thumbnailPromise])
+    } catch (error) {
+      return ctx.helper.error({ ctx, error, errorType: 'imageUploadFail' })
+    }
     // 生成缩略图
     ctx.helper.success({
       ctx,
