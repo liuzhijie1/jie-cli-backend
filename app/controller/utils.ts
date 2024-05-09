@@ -4,6 +4,7 @@ import { parse, join, extname } from 'path'
 import { createWriteStream, createReadStream } from 'fs'
 import { nanoid } from 'nanoid'
 import { pipeline } from 'stream/promises'
+import Busboy from 'busboy'
 
 export default class UtilsController extends Controller {
   async fileLocalUpload() {
@@ -83,6 +84,58 @@ export default class UtilsController extends Controller {
         url: this.pathToURL(savedFilePath),
         thumbnailUrl: this.pathToURL(savedThumbnailPath),
       },
+    })
+  }
+  async testBusBoy() {
+    const { ctx, app } = this
+    const results = await this.uploadFileUseBusBoy()
+    ctx.helper.success({ ctx, res: results })
+  }
+  uploadFileUseBusBoy() {
+    const { ctx, app } = this
+    return new Promise<string[]>((resolve, reject) => {
+      const busboy = new Busboy({ headers: ctx.req.headers as any })
+      const results: string[] = []
+      const filePromises: Promise<void>[] = []
+      busboy.on('file', (fieldname, file, filename) => {
+        app.logger.info('file', fieldname, filename)
+        const ext = extname(filename)
+        const name = nanoid(6)
+        const savePath = join(app.config.baseDir, 'uploads', `${name}${ext}`)
+        const saveThumbnailPath = join(
+          app.config.baseDir,
+          'uploads',
+          `${name}_thumbnail${ext}`
+        )
+        const target = createWriteStream(savePath)
+        const target2 = createWriteStream(saveThumbnailPath)
+        const transformer = sharp().resize({ width: 300 })
+        const savePromise = pipeline(file, target)
+        const thumbnailPromise = pipeline(file, transformer, target2)
+        const combinedPromise = Promise.all([savePromise, thumbnailPromise])
+          .then(() => {
+            results.push(this.pathToURL(savePath))
+            results.push(this.pathToURL(saveThumbnailPath))
+          })
+          .catch((error) => {
+            reject(error)
+          })
+        filePromises.push(combinedPromise)
+      })
+      busboy.on('field', (fieldname, val) => {
+        app.logger.info('field', fieldname, val)
+      })
+      busboy.on('finish', () => {
+        Promise.all(filePromises)
+          .then(() => {
+            resolve(results)
+          })
+          .catch(reject)
+      })
+      busboy.on('error', (error) => {
+        reject(error)
+      })
+      ctx.req.pipe(busboy)
     })
   }
 }

@@ -31,12 +31,23 @@ export default (app: Application) => {
   router.get('/api/templates', controller.work.templateList)
   router.patch('/api/works/:id', jwtMiddleware, controller.work.update)
   router.delete('/api/works/:id', jwtMiddleware, controller.work.delete)
-  router.post('/api/works/publish/:id', jwtMiddleware, controller.work.publishWork)
-  router.post('/api/works/publish-template/:id', jwtMiddleware, controller.work.publishTemplate)
+  router.post(
+    '/api/works/publish/:id',
+    jwtMiddleware,
+    controller.work.publishWork
+  )
+  router.post(
+    '/api/works/publish-template/:id',
+    jwtMiddleware,
+    controller.work.publishTemplate
+  )
   router.post('/api/works/copy/:id', jwtMiddleware, controller.work.copyWork)
   router.get('/api/works/:id', jwtMiddleware, controller.work.myWork)
   router.get('/api/templates/:id', controller.work.template)
-  
+
   router.post('/api/utils/upload', controller.utils.fileLocalUpload)
   router.post('/api/utils/upload-stream', controller.utils.fileUploadByStream)
+  // TODO oss upload
+  // router.post('/api/utils/upload-oss', controller.utils.fileOssUpload)
+  router.post('/api/utils/upload-busboy', controller.utils.testBusBoy)
 }
