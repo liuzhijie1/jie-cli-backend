@@ -41,8 +41,11 @@ export default (appInfo: EggAppInfo) => {
     encrypt: false,
   }
 
+  console.log('process.env.JWT_SECRET ||', process.env.JWT_SECRET)
   config.jwt = {
-    secret: '1234567890',
+    enable: true,
+    secret: process.env.JWT_SECRET || '',
+    match: ['/api/users/getUserInfo', '/api/works', 'api/utils/upload-img'],
   }
 
   // egg 的文件上传配置 默认的mode 是 stream
