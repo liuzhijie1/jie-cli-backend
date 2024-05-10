@@ -6,6 +6,8 @@ import { nanoid } from 'nanoid'
 import { pipeline } from 'stream/promises'
 import Busboy from 'busboy'
 import { FileStream } from '../../typings/app'
+import { createSSRApp } from 'vue'
+import { renderToString, renderToNodeStream } from '@vue/server-renderer'
 
 export default class UtilsController extends Controller {
   async fileLocalUpload() {
@@ -182,5 +184,24 @@ export default class UtilsController extends Controller {
       }
     }
     ctx.helper.success({ ctx, res: { urls } })
+  }
+  async renderH5Page() {
+    const { ctx, app } = this
+    const vueApp = createSSRApp({
+      data() {
+        return {
+          msg: 'hello world',
+          title: 'Vue SSR',
+          content: 'Hello Vue SSR',
+        }
+      },
+      template: `<h1>{{msg}}</h1>`,
+    })
+    // const appContent = await renderToString(vueApp)
+    // ctx.response.type = 'text/html'
+    // ctx.body = appContent
+    const stream = renderToNodeStream(vueApp)
+    ctx.status = 200
+    await pipeline(stream, ctx.res)
   }
 }
