@@ -141,7 +141,8 @@ export default class UtilsController extends Controller {
   }
   async uploadMultipleFiles() {
     const { ctx, app } = this
-    const parts = ctx.multipart()
+    const { fileSize } = app.config.multipart
+    const parts = ctx.multipart({ limits: { fileSize: fileSize as number } })
     const urls: string[] = []
     let part: FileStream | string[]
     while ((part = await parts())) {
@@ -172,6 +173,13 @@ export default class UtilsController extends Controller {
       }
       urls.push(this.pathToURL(savePath))
       urls.push(this.pathToURL(saveThumbnailPath))
+      if (part.truncated) {
+        return ctx.helper.error({
+          ctx,
+          errorType: 'imageUploadFileSizeError',
+          error: `Reach fileSize limit ${fileSize} bytes`,
+        })
+      }
     }
     ctx.helper.success({ ctx, res: { urls } })
   }

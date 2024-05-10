@@ -50,12 +50,16 @@ export default (appInfo: EggAppInfo) => {
   //   mode: 'file',
   //   tmpdir: join(appInfo.baseDir, 'uploads'),
   // }
+  config.multipart = {
+    whitelist: ['.png', '.jpg', '.gif', '.webp'],
+    fileSize: '1mb',
+  }
 
   config.static = {
     dir: [
       { prefix: '/public', dir: join(appInfo.baseDir, 'app/public') },
       { prefix: '/uploads', dir: join(appInfo.baseDir, 'uploads') },
-    ]
+    ],
   }
 
   config.cors = {
@@ -83,7 +87,7 @@ export default (appInfo: EggAppInfo) => {
       allowedMethods: ['POST'],
     },
     baseUrl: 'default.url',
-    H5BaseURL: 'http://localhost:7001/api/pages'
+    H5BaseURL: 'http://localhost:7001/api/pages',
   }
 
   config.mongo = {
