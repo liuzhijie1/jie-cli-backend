@@ -14,6 +14,7 @@ export default class UtilsService extends Service {
     }
     const { title, desc, content } = work
     // let content = testContentData
+    this.px2vw(content && content.components)
     const vueApp = createSSRApp({
       data() {
         return {
@@ -43,5 +44,25 @@ export default class UtilsService extends Service {
       return `${formatKey}:${value}`
     })
     return styleArr.join(';')
+  }
+  px2vw(components = []) {
+    const reg = /^(\d+(\.\d+)?)px$/
+    components.forEach((component: any = {}) => {
+      const props = component.props || {}
+      Object.keys(props).forEach((key) => {
+        const value = props[key]
+        if (typeof value !== 'string') {
+          return
+        }
+        if (reg.test(value) === false) {
+          return
+        }
+        const arr = value.match(reg) || []
+        const numStr = arr[1]
+        const num = parseFloat(numStr)
+        const vwNum = (num / 375) * 100
+        props[key] = `${vwNum.toFixed(2)}vw`
+      })
+    })
   }
 }
