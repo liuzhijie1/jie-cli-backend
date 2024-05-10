@@ -11,4 +11,8 @@ export const utilsErrorMessages = {
     errno: 103003,
     message: '上传文件大小错误',
   },
+  h5WorkNotExistError: {
+    errno: 103004,
+    message: 'H5作品不存在',
+  },
 }

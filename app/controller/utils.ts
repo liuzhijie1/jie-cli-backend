@@ -204,4 +204,27 @@ export default class UtilsController extends Controller {
     ctx.status = 200
     await pipeline(stream, ctx.res)
   }
+  splitIdAndUuid(str = '') {
+    const result: { id: string | number; uuid: string } = { id: '', uuid: '' }
+    if (!str) return result
+    const firstDashIndex = str.indexOf('-')
+    if (firstDashIndex < 0) return result
+    result.id = str.slice(0, firstDashIndex)
+    result.uuid = str.slice(firstDashIndex + 1)
+    return result
+  }
+  async renderH5PageWithData() {
+    const { ctx, app } = this
+    const { idAndUuid } = ctx.params
+    const query = this.splitIdAndUuid(idAndUuid)
+    query.id = Number(query.id)
+    try {
+      const pageData = await this.service.utils.renderToPageData(
+        query as { id: number; uuid: string }
+      )
+      await ctx.render('page.tpl', pageData)
+    } catch (error) {
+      ctx.helper.error({ ctx, error, errorType: 'h5WorkNotExistError' })
+    }
+  }
 }

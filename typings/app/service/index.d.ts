@@ -11,6 +11,7 @@ import ExportDog from '../../../app/service/dog';
 import ExportHome from '../../../app/service/home';
 import ExportTest from '../../../app/service/test';
 import ExportUser from '../../../app/service/user';
+import ExportUtils from '../../../app/service/utils';
 import ExportWork from '../../../app/service/work';
 
 declare module 'egg' {
@@ -19,6 +20,7 @@ declare module 'egg' {
     home: AutoInstanceType<typeof ExportHome>;
     test: AutoInstanceType<typeof ExportTest>;
     user: AutoInstanceType<typeof ExportUser>;
+    utils: AutoInstanceType<typeof ExportUtils>;
     work: AutoInstanceType<typeof ExportWork>;
   }
 }

@@ -80,4 +80,5 @@ export default (app: Application) => {
   router.post('/utils/upload-img', controller.utils.uploadMultipleFiles)
 
   router.get('/pages/:idAndUuid', controller.utils.renderH5Page)
+  router.get('/pages-lego/:idAndUuid', controller.utils.renderH5PageWithData)
 }
