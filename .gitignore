@@ -12,7 +12,7 @@ run/
 app/**/*.js
 app/*.js
 config/*.js
-*.js
+# *.js
 
 # General
 .DS_Store
@@ -107,3 +107,4 @@ jspm_packages/
 .env
 
 uploads/
+app/public
