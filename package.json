@@ -71,7 +71,8 @@
     "ci": "npm run lint && npm run cov",
     "lint": "eslint . --ext .ts",
     "clean": "ets clean",
-    "build:template": "npx webpack --config webpack/webpack.config.js"
+    "build:template": "npx webpack --config webpack/webpack.config.js",
+    "upload": "node webpack/uploadToOSS.js"
   },
   "ci": {
     "version": "8, 10"

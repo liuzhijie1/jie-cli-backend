@@ -3,9 +3,10 @@ const path = require('path');
 const fs = require('fs');
 const dotenv = require('dotenv');
 const OSS = require('ali-oss');
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
 const publicPath = path.resolve(__dirname, '../app/public');
+
 const client = new OSS({
   region: process.env.OSS_REGION,
   accessKeyId: process.env.OSS_ACCESS_KEY_ID,
