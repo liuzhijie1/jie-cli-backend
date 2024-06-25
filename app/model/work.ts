@@ -3,6 +3,11 @@ import { ObjectId } from 'mongoose'
 import AutoIncrementFactory from 'mongoose-sequence'
 import { UserProps } from './user'
 
+interface ChannelProps {
+  id: string
+  name: string
+}
+
 export interface WorkProps {
   id?: number
   uuid: string
@@ -18,6 +23,7 @@ export interface WorkProps {
   status?: 0 | 1 | 2
   user: ObjectId
   latestPublishAt?: Date
+  channels?: ChannelProps[]
 }
 
 function initWorkModel(app: Application) {
@@ -38,6 +44,7 @@ function initWorkModel(app: Application) {
       copiedCount: { type: Number, default: 0 },
       status: { type: Number, default: 1 },
       user: { type: Schema.Types.ObjectId, ref: 'User' },
+      channels: { type: Array },
       latestPublishAt: { type: Date },
     },
     { timestamps: true }

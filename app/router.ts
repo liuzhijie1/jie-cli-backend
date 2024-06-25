@@ -81,4 +81,6 @@ export default (app: Application) => {
 
   router.get('/pages/:idAndUuid', controller.utils.renderH5Page)
   router.get('/pages-lego/:idAndUuid', controller.utils.renderH5PageWithData)
+  router.post('/channel', controller.work.createChannel)
+  router.get('/channel/getWorkChannels/:id', controller.work.getWorkChannel)
 }

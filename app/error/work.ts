@@ -11,4 +11,12 @@ export const workErrorMessages = {
     errno: 102003,
     message: '作品不是公开的',
   },
+  channelValidateFail: {
+    error: 102004,
+    message: '频道验证失败',
+  },
+  channelOperateFail: {
+    error: 102005,
+    message: '频道操作失败',
+  }
 }
