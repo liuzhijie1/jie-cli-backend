@@ -2,6 +2,8 @@ import { Controller } from 'egg'
 import { GlobalErrorTypes } from '../error'
 import defineRoles from '../roles/roles'
 import { subject } from '@casl/ability'
+import { permittedFieldsOf } from '@casl/ability/extra'
+import { difference } from 'lodash'
 
 const caslMethodMapping: Record<string, string> = {
   GET: 'read',
@@ -9,6 +11,8 @@ const caslMethodMapping: Record<string, string> = {
   PATCH: 'update',
   DELETE: 'delete',
 }
+
+const options = { fieldsFrom: (rule) => rule.fields || [] }
 
 export default function checkPermission(
   modelName: string,
@@ -31,6 +35,7 @@ export default function checkPermission(
         return ctx.helper.error({ ctx, errorType })
       }
       let permission = false
+      let keyPermission = true
       const ability = defineRoles(ctx.state.user)
       const rule = ability.relevantRuleFor(action, modelName)
       if (rule && rule.conditions) {
@@ -43,7 +48,15 @@ export default function checkPermission(
       } else {
         permission = ability.can(action, modelName)
       }
-      if (!permission) {
+      if (rule && rule.fields) {
+        const permittedFields = permittedFieldsOf(ability, action, modelName, options)
+        if (permittedFields.length) {
+          const payloadKeys = Object.keys(ctx.request.body)
+          const diffKeys = difference(payloadKeys, permittedFields)
+          keyPermission = diffKeys.length === 0
+        }
+      }
+      if (!permission || !keyPermission) {
         return ctx.helper.error({ ctx, errorType })
       }
       await originalMethod.apply(this, args)
