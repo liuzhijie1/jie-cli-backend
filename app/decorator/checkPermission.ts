@@ -3,7 +3,7 @@ import { GlobalErrorTypes } from '../error'
 import defineRoles from '../roles/roles'
 import { subject } from '@casl/ability'
 import { permittedFieldsOf } from '@casl/ability/extra'
-import { difference } from 'lodash'
+import { difference, assign } from 'lodash/fp'
 
 const caslMethodMapping: Record<string, string> = {
   GET: 'read',
@@ -20,13 +20,18 @@ interface ModelMapping {
 interface IOptions {
   action?: string
   key?: string
-  value?: { type: 'param' | 'body'; valueKey: string }
+  value?: { type: 'params' | 'body'; valueKey: string }
+}
+
+const defaultSearchOptions = {
+  key: 'id',
+  value: { type: 'params', valueKey: 'id' },
 }
 
 const fieldsOptions = { fieldsFrom: (rule) => rule.fields || [] }
 
 export default function checkPermission(
-  modelName: string,
+  modelName: string | ModelMapping,
   errorType: GlobalErrorTypes,
   options?: IOptions
 ) {
@@ -41,6 +46,18 @@ export default function checkPermission(
       // const userId = ctx.state.user._id
       // const certianRecord = await ctx.model[modelName].findOne({ id })
       const { method } = ctx.request
+      const searchOptions = assign(defaultSearchOptions, options || {})
+      const { key, value } = searchOptions
+      const { type, valueKey } = value
+
+      // 构建一个 query
+      const source = type === 'params' ? ctx.params : ctx.request.body
+      const query = { [key]: source[valueKey] }
+
+      // 构建 modelname
+      const mongooseModelName = typeof modelName === 'string' ? modelName : modelName.mongoose
+      const caslModelName = typeof modelName === 'string' ? modelName : modelName.casl
+
       const action =
         options && options.action ? options.action : caslMethodMapping[method]
       console.log(action)
@@ -50,22 +67,20 @@ export default function checkPermission(
       let permission = false
       let keyPermission = true
       const ability = defineRoles(ctx.state.user)
-      const rule = ability.relevantRuleFor(action, modelName)
+      const rule = ability.relevantRuleFor(action, caslModelName)
       if (rule && rule.conditions) {
-        const certianRecord = await ctx.model[modelName]
-          .findOne({
-            id,
-          })
+        const certianRecord = await ctx.model[mongooseModelName]
+          .findOne(query)
           .lean()
-        permission = ability.can(action, subject(modelName, certianRecord))
+        permission = ability.can(action, subject(caslModelName, certianRecord))
       } else {
-        permission = ability.can(action, modelName)
+        permission = ability.can(action, caslModelName)
       }
       if (rule && rule.fields) {
         const permittedFields = permittedFieldsOf(
           ability,
           action,
-          modelName,
+          caslModelName,
           fieldsOptions
         )
         if (permittedFields.length) {

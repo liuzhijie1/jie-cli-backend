@@ -30,6 +30,16 @@ export default class WorkController extends Controller {
   }
 
   @validateInput(channelCreateRules, 'channelValidateFail')
+  @checkPermission(
+    { casl: 'Channel', mongoose: 'Work' },
+    'workNoPermissionFail',
+    {
+      value: {
+        type: 'body',
+        valueKey: 'workId',
+      },
+    }
+  )
   async createChannel() {
     const { ctx } = this
     const { name, workId } = ctx.request.body
@@ -52,6 +62,10 @@ export default class WorkController extends Controller {
     }
   }
 
+  @checkPermission(
+    { casl: 'Channel', mongoose: 'Work' },
+    'workNoPermissionFail'
+  )
   async getWorkChannel() {
     const { ctx } = this
     const { id } = ctx.params
@@ -70,6 +84,11 @@ export default class WorkController extends Controller {
     }
   }
 
+  @checkPermission(
+    { casl: 'Channel', mongoose: 'Work' },
+    'workNoPermissionFail',
+    { key: 'channels.id' }
+  )
   async updateChannelName() {
     const { ctx } = this
     const { id } = ctx.params
@@ -89,6 +108,11 @@ export default class WorkController extends Controller {
     }
   }
 
+  @checkPermission(
+    { casl: 'Channel', mongoose: 'Work' },
+    'workNoPermissionFail',
+    { key: 'channels.id' }
+  )
   async deleteChannel() {
     const { ctx } = this
     const { id } = ctx.params
