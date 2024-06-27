@@ -12,12 +12,23 @@ const caslMethodMapping: Record<string, string> = {
   DELETE: 'delete',
 }
 
-const options = { fieldsFrom: (rule) => rule.fields || [] }
+interface ModelMapping {
+  mongoose: string
+  casl: string
+}
+
+interface IOptions {
+  action?: string
+  key?: string
+  value?: { type: 'param' | 'body'; valueKey: string }
+}
+
+const fieldsOptions = { fieldsFrom: (rule) => rule.fields || [] }
 
 export default function checkPermission(
   modelName: string,
   errorType: GlobalErrorTypes,
-  userKey = 'user'
+  options?: IOptions
 ) {
   return function (prototype, key: string, descriptor: PropertyDescriptor) {
     const originalMethod = descriptor.value
@@ -30,7 +41,9 @@ export default function checkPermission(
       // const userId = ctx.state.user._id
       // const certianRecord = await ctx.model[modelName].findOne({ id })
       const { method } = ctx.request
-      const action = caslMethodMapping[method]
+      const action =
+        options && options.action ? options.action : caslMethodMapping[method]
+      console.log(action)
       if (!ctx.state && !ctx.state.user) {
         return ctx.helper.error({ ctx, errorType })
       }
@@ -49,7 +62,12 @@ export default function checkPermission(
         permission = ability.can(action, modelName)
       }
       if (rule && rule.fields) {
-        const permittedFields = permittedFieldsOf(ability, action, modelName, options)
+        const permittedFields = permittedFieldsOf(
+          ability,
+          action,
+          modelName,
+          fieldsOptions
+        )
         if (permittedFields.length) {
           const payloadKeys = Object.keys(ctx.request.body)
           const diffKeys = difference(payloadKeys, permittedFields)

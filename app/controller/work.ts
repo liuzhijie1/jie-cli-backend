@@ -175,7 +175,7 @@ export default class WorkController extends Controller {
       .lean()
     ctx.helper.success({ ctx, res })
   }
-  @checkPermission('Work', 'workNoPermissionFail')
+  @checkPermission('Work', 'workNoPermissionFail', { action: 'publish' })
   async publish(isTemplate: boolean) {
     const { ctx, service } = this
     const { id } = ctx.params
