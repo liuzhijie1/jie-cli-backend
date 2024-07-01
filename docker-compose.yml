@@ -5,8 +5,12 @@ services:
     container_name: lego-mongo
     volumes:
       - '.docker-volumes/mongo/data:/data/db'
+      - '$PWD/mongo-entrypoint/:/docker-entrypoint-initdb.d/'
     ports:
       - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=pass
   lego-backend:
     depends_on:
       - lego-mongo
