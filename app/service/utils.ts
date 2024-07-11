@@ -23,7 +23,7 @@ export default class UtilsService extends Service {
       },
       template: '<final-page :components="components" />',
     })
-    vueApp.use(LogoComponents)
+    vueApp.use(JieCliComponent)
     const html = await renderToString(vueApp)
     const bodyStyle = this.propsToStyle(content && content.props)
     return {
